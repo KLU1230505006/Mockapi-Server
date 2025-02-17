@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Data</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #444;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #1d3557;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+<h1>Weather Data</h1>
+
+<table id="weatherTable">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Created At</th>
+    <th>Avatar</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  </tbody>
+</table>
+
+<script>
+
+  async function fetchWeatherData() {
+    const apiURL = "http://localhost:8000/data";
+    try {
+      const response = await fetch(apiURL);
+
+
+      if (!response.ok) {
+        console.error(`HTTP Hatası: ${response.status} ${response.statusText}`);
+        return;
+      }
+
+
+      const data = await response.json();
+      const tableBody = document.getElementById('weatherTable').querySelector('tbody');
+      tableBody.innerHTML = '';
+
+
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.createdAt}</td>
+                        <td>${item.avatar}</td>
+                    `;
+        tableBody.appendChild(row);
+      });
+      console.log("Başarıyla alındı:", data);
+    } catch (error) {
+
+      console.error("Veriler alınırken bir hata oluştu:", error);
+    }
+
+  }
+  window.onload = fetchWeatherData;
+</script>
+</body>
+</html>
